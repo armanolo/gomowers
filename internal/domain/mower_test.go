@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"errors"
 	"fmt"
 	"testing"
 
@@ -18,19 +17,21 @@ func TestCreateMower(t *testing.T) {
 		path []string
 		e    string
 	}{
-		//		{5, 5, []string{"M", "L", "R"}, ""},
-		{1, 1, []string{"A"}, ""},
+		{5, 5, []string{"M", "L", "R"}, ""},
+		{1, 1, []string{}, ""},
+		{1, 1, []string{}, "there is another mower in the position: 1:1"},
 	}
 
 	for n, test := range tests {
-
-		mp := MowerPosition{Coordinates: Coordinates{test.mpx, test.mpy}}
-		path := Path{Movement: test.path}
+		coord, _ := CreateCoordinates(test.mpx, test.mpy)
+		card, _ := CreateCardinal("N")
+		mp, _ := CreateMowerPosition(coord, card)
+		path, _ := CreatePath(test.path)
 
 		m, err := CreateMower(p, mp, path)
 
 		if test.e != "" {
-			if err == nil || err.Error() != errors.New(test.e).Error() {
+			if err == nil || err.Error() != test.e {
 				t.Errorf("Test %d: error: %s", n, err)
 			}
 		} else {

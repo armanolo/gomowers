@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"mowers/internal/application"
 	"mowers/internal/domain"
 	"mowers/internal/infrastructure"
 )
@@ -37,7 +38,7 @@ func main() {
 func process() (string, error) {
 
 	var p = new(domain.Plateau)
-	var ml []domain.Mower = []domain.Mower{}
+	var ml = new([]domain.Mower)
 	content, err := getContent(it, ct)
 
 	if err != nil {
@@ -45,12 +46,16 @@ func process() (string, error) {
 	}
 
 	err = infrastructure.ValidateInput(content, p, ml)
-
 	if err != nil {
 		return "", err
 	}
 
-	return "", nil
+	out, err := application.ManageMowers(ml)
+	if err != nil {
+		return "", err
+	}
+
+	return out, nil
 
 }
 

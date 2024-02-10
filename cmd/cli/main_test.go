@@ -34,11 +34,11 @@ func TestMain(t *testing.T) {
 		},
 		{
 			[]string{"cmd", "-i", "text", "-c", "55\n11N\nMMM\n"},
-			"",
+			"14N",
 		},
 		{
 			[]string{"cmd", "-i", "file", "-c", "example_test.coord"},
-			"",
+			"13N",
 		},
 	}
 

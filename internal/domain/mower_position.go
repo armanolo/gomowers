@@ -1,6 +1,8 @@
 package domain
 
-import "errors"
+import (
+	"errors"
+)
 
 type MowerPosition struct {
 	Coordinates Coordinates
@@ -13,15 +15,26 @@ func MowerPositionFromString(position string) (MowerPosition, error) {
 		return MowerPosition{}, errors.New("bad mower position format")
 	}
 
-	cardinal, err := CardinalFromString(position[2:])
+	cardinal, err := CreateCardinal(position[2:])
 
-	_ = cardinal
+	if err != nil {
+		return MowerPosition{}, err
+	}
 
 	coord, err := CoordinatesFromString(position[:2])
 
-	_ = coord
+	if err != nil {
+		return MowerPosition{}, err
+	}
 
-	_ = err
+	return CreateMowerPosition(coord, cardinal)
+}
 
-	return MowerPosition{}, nil
+func CreateMowerPosition(coordinates Coordinates, cardinal Cardinal) (MowerPosition, error) {
+
+	return MowerPosition{Coordinates: coordinates, Cardinal: cardinal}, nil
+}
+
+func (c MowerPosition) String() string {
+	return c.Coordinates.String() + c.Cardinal.String()
 }

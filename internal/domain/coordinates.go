@@ -2,6 +2,7 @@ package domain
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -39,4 +40,8 @@ func CreateCoordinates(x int, y int) (Coordinates, error) {
 	}
 
 	return Coordinates{X: x, Y: y}, nil
+}
+
+func (c Coordinates) String() string {
+	return fmt.Sprintf("%d%d", c.X, c.Y)
 }

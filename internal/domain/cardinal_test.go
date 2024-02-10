@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"errors"
 	"fmt"
 	"testing"
 
@@ -22,10 +21,10 @@ func TestCardinalFromString(t *testing.T) {
 
 	for n, test := range tests {
 
-		c, err := CardinalFromString(test.c)
+		c, err := CreateCardinal(test.c)
 
 		if test.ee != "" {
-			if err == nil || err.Error() != errors.New(test.ee).Error() {
+			if err == nil || err.Error() != test.ee {
 				t.Errorf("Test %d: error: %s", n, err)
 			}
 		} else {
@@ -33,8 +32,8 @@ func TestCardinalFromString(t *testing.T) {
 				t.Errorf("Test %d: error: %q", n, err)
 			}
 
-			assert.Equal(t, test.ce, c.Lettler,
-				fmt.Sprintf("test %d: got bad letter: %s and %s was expected", n, test.ce, c.Lettler))
+			assert.Equal(t, test.ce, c.Letter,
+				fmt.Sprintf("test %d: got bad letter: %s and %s was expected", n, test.ce, c.Letter))
 		}
 
 	}

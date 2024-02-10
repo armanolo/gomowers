@@ -1,14 +1,13 @@
 package domain
 
 import (
-	"errors"
 	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCPathFromString(t *testing.T) {
+func TestPathFromString(t *testing.T) {
 	tests := []struct {
 		c  string
 		ce []string
@@ -24,7 +23,7 @@ func TestCPathFromString(t *testing.T) {
 		p, err := PathFromString(test.c)
 
 		if test.ee != "" {
-			if err == nil || err.Error() != errors.New(test.ee).Error() {
+			if err == nil || err.Error() != test.ee {
 				t.Errorf("Test %d: error: %s", n, err)
 			}
 		} else {

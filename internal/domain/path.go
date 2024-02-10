@@ -22,21 +22,22 @@ func PathFromString(movements string) (Path, error) {
 	if len(movements) < 1 {
 		return Path{}, errors.New("bad path format")
 	}
+	lu := strings.ToUpper(movements)
+	arr := strings.Split(lu, "")
 
+	return CreatePath(arr)
+}
+
+func CreatePath(movements []string) (Path, error) {
 	var n int = len(movements)
-
 	m := make([]string, n)
 
-	lu := strings.ToUpper(movements)
-
-	for p, a := range strings.Split(lu, "") {
-
+	for p, a := range movements {
 		if strings.Contains(MOVEMENTS, a) {
 			m[p] = a
 		} else {
 			return Path{}, errors.New("bad path value")
 		}
 	}
-
 	return Path{Movement: m}, nil
 }

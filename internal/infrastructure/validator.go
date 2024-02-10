@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func ValidateInput(coordinates string, p *domain.Plateau, ml []domain.Mower) error {
+func ValidateInput(coordinates string, p *domain.Plateau, ml *[]domain.Mower) error {
 	if coordinates == "" {
 		return errors.New("input is empty")
 	}
@@ -37,7 +37,7 @@ func ValidateInput(coordinates string, p *domain.Plateau, ml []domain.Mower) err
 			if err != nil {
 				return err
 			}
-			ml = append(ml, nm)
+			*ml = append(*ml, nm)
 		}
 	}
 
