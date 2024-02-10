@@ -5,7 +5,13 @@ import (
 	"strings"
 )
 
-var MOVEMENTS string = "LRM"
+const (
+	PATH_L = "L"
+	PATH_R = "R"
+	PATH_M = "M"
+)
+
+var MOVEMENTS string = PATH_L + PATH_R + PATH_M
 
 type Path struct {
 	Movement []string

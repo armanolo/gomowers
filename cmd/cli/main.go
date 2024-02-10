@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bytes"
+	"errors"
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"mowers/internal/domain"
 	"mowers/internal/infrastructure"
@@ -13,67 +16,59 @@ var it string
 var ct string
 
 func main() {
-	fmt.Println("CLI: Start Mowers App")
 	flag.StringVar(&it, "i", "text", "input type: text | file")
 	flag.StringVar(&ct, "c", "", "coordaintes composition: check example.coord")
 	flag.Parse()
 
 	if it == "" || ct == "" {
 		flag.PrintDefaults()
-		os.Exit(0)
+		return
 	}
+
+	res, err := process()
+	if err != nil {
+		fmt.Printf("error: %s", err.Error())
+	} else {
+		fmt.Print(res)
+	}
+
+}
+
+func process() (string, error) {
 
 	var p = new(domain.Plateau)
 	var ml []domain.Mower = []domain.Mower{}
-	var content string = getContent(it, ct)
-
-	/*
-		var content string
-
-		if it == "file" {
-			file, err := os.Open(ct) // For read access.
-			if err != nil {
-				fmt.Printf("not file found in: %s \n", ct)
-				os.Exit(0)
-			}
-			data := make([]byte, 512)
-			_, err = file.Read(data)
-			if err != nil {
-				fmt.Println("Error reading file")
-				os.Exit(0)
-			}
-			content = string(data)
-		} else {
-			content = string(ct)
-		}
-	*/
-
-	err := infrastructure.ValidateInput(content, p, ml)
+	content, err := getContent(it, ct)
 
 	if err != nil {
-		fmt.Println("Error")
-		os.Exit(0)
+		return "", err
 	}
 
-	fmt.Println("\n\nCLI: End Mowers App")
+	err = infrastructure.ValidateInput(content, p, ml)
+
+	if err != nil {
+		return "", err
+	}
+
+	return "", nil
+
 }
 
-func getContent(it string, ct string) string {
+func getContent(it string, ct string) (string, error) {
 
 	if it == "file" {
-		file, err := os.Open(ct) // For read access.
+		file, err := os.Open(ct)
 		if err != nil {
-			fmt.Printf("not file found in: %s \n", ct)
-			os.Exit(0)
+			return "", fmt.Errorf("not file found in: %s", ct)
 		}
 		data := make([]byte, 512)
 		_, err = file.Read(data)
+		data = bytes.Trim(data, "\x00")
 		if err != nil {
-			fmt.Println("Error reading file")
-			os.Exit(0)
+			return "", errors.New("error reading file")
 		}
-		return string(data)
+		return strings.Trim(string(data), "\n "), nil
 	} else {
-		return string(ct)
+		return strings.Trim(string(ct), "\n "), nil
 	}
 }

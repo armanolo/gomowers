@@ -18,7 +18,8 @@ func TestCreateMower(t *testing.T) {
 		path []string
 		e    string
 	}{
-		{5, 5, []string{"M", "L", "R"}, ""},
+		//		{5, 5, []string{"M", "L", "R"}, ""},
+		{1, 1, []string{"A"}, ""},
 	}
 
 	for n, test := range tests {

@@ -5,7 +5,14 @@ import (
 	"strings"
 )
 
-var CARDINALS = [4]string{"N", "S", "W", "E"}
+const (
+	CARDINAL_N = "N"
+	CARDINAL_S = "S"
+	CARDINAL_W = "W"
+	CARDINAL_E = "E"
+)
+
+var CARDINALS = [4]string{CARDINAL_N, CARDINAL_E, CARDINAL_W, CARDINAL_S}
 
 type Cardinal struct {
 	Lettler string

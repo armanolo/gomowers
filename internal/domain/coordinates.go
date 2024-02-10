@@ -26,5 +26,17 @@ func CoordinatesFromString(coordinates string) (Coordinates, error) {
 		return Coordinates{}, errors.New("bad coodinate y")
 	}
 
-	return Coordinates{X: cx, Y: cy}, nil
+	return CreateCoordinates(cx, cy)
+}
+
+func CreateCoordinates(x int, y int) (Coordinates, error) {
+
+	if x < 0 || x > 9 {
+		return Coordinates{}, errors.New("bad coodinate x")
+	}
+	if y < 0 || y > 9 {
+		return Coordinates{}, errors.New("bad coodinate y")
+	}
+
+	return Coordinates{X: x, Y: y}, nil
 }
