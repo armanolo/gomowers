@@ -1,19 +1,21 @@
 package domain
 
+import "errors"
+
 type Mower struct {
 	Plateu        *Plateau
 	MowerPosition MowerPosition
 	Path          Path
 }
 
-func CreateMower(p *Plateau, mp MowerPosition, path Path) (Mower, error) {
+func CreateMower(p *Plateau, mp MowerPosition, path Path) (*Mower, error) {
 	m := Mower{Plateu: p, MowerPosition: mp, Path: path}
-	err := p.AddMowerPosition(m.GetPosition())
+	err := p.AddMower(&m)
 
 	if err != nil {
-		return Mower{}, err
+		return &Mower{}, err
 	}
-	return m, nil
+	return &m, nil
 }
 
 func (m *Mower) GetPosition() Coordinates {
@@ -51,11 +53,18 @@ func (m *Mower) move(movement string) error {
 		case CARDINAL_S:
 			y--
 		default:
+			return errors.New("wrong cardinal")
 		}
 
-		coord, err = CreateCoordinates(x, y)
+		newcor, err := CreateCoordinates(x, y)
 		if err != nil {
 			return err
+		}
+		err = m.Plateu.ValidateMowerPosition(m)
+		if err != nil {
+			return err
+		} else {
+			coord = newcor
 		}
 	} else {
 		card, err = m.MowerPosition.Cardinal.TurnTo(movement)

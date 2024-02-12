@@ -38,14 +38,14 @@ func main() {
 func process() (string, error) {
 
 	var p = new(domain.Plateau)
-	var ml = new([]domain.Mower)
+	var ml []*domain.Mower
 	content, err := getContent(it, ct)
 
 	if err != nil {
 		return "", err
 	}
 
-	err = infrastructure.ValidateInput(content, p, ml)
+	ml, err = infrastructure.ValidateInput(content, p)
 	if err != nil {
 		return "", err
 	}

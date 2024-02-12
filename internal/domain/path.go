@@ -33,11 +33,15 @@ func CreatePath(movements []string) (Path, error) {
 	m := make([]string, n)
 
 	for p, a := range movements {
-		if strings.Contains(MOVEMENTS, a) {
+		if IsMovementValue(a) {
 			m[p] = a
 		} else {
 			return Path{}, errors.New("bad path value")
 		}
 	}
 	return Path{Movement: m}, nil
+}
+
+func IsMovementValue(movement string) bool {
+	return strings.Contains(MOVEMENTS, movement)
 }

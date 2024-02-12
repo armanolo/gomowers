@@ -6,51 +6,47 @@ import (
 	"strings"
 )
 
-func ValidateInput(coordinates string, p *domain.Plateau, ml *[]domain.Mower) error {
+func ValidateInput(coordinates string, p *domain.Plateau) ([]*domain.Mower, error) {
+	ml := []*domain.Mower{}
+
 	if coordinates == "" {
-		return errors.New("input is empty")
+		return []*domain.Mower{}, errors.New("input is empty")
 	}
 
 	listCoordinates := strings.Split(coordinates, "\n")
 
 	if len(listCoordinates) < 3 || len(listCoordinates)%2 == 0 {
-		return errors.New("bad format input data")
+		return []*domain.Mower{}, errors.New("bad format input data")
 	}
 
-	err := ValidatePlateu(listCoordinates[0], p)
+	coord, err := domain.CoordinatesFromString(listCoordinates[0])
 	if err != nil {
-		return err
+		return []*domain.Mower{}, err
+	}
+
+	*p, err = domain.CreatePlateau(coord)
+	if err != nil {
+		return []*domain.Mower{}, err
 	}
 
 	for i := 1; i < len(listCoordinates); i++ {
 		if i%2 == 1 {
 			mp, err := domain.MowerPositionFromString(listCoordinates[i])
 			if err != nil {
-				return err
+				return []*domain.Mower{}, err
 			}
 			path, err := domain.PathFromString(listCoordinates[i+1])
 			if err != nil {
-				return err
+				return []*domain.Mower{}, err
 			}
 
 			nm, err := domain.CreateMower(p, mp, path)
 			if err != nil {
-				return err
+				return []*domain.Mower{}, err
 			}
-			*ml = append(*ml, nm)
+			ml = append(ml, nm)
 		}
 	}
 
-	return nil
-}
-
-func ValidatePlateu(coordinates string, p *domain.Plateau) error {
-
-	if c, err := domain.CoordinatesFromString(coordinates); err != nil {
-		return err
-	} else {
-		p.Coordinates = domain.Coordinates{X: c.X, Y: c.Y}
-		return nil
-	}
-
+	return ml, nil
 }

@@ -35,14 +35,20 @@ func TestMowerPositionFromString(t *testing.T) {
 				t.Errorf("Test %d: error: %q", n, err)
 			}
 
+			expected := fmt.Sprintf("%d%d%s", test.cx, test.cy, test.c)
+
+			assert.Equal(t, expected, mp.String(),
+				fmt.Sprintf("test %d: got mower position: %s and %s was expected", n, mp.String(), expected))
+
 			assert.Equal(t, test.cx, mp.Coordinates.X,
-				fmt.Sprintf("test %d: got position x: %d and %d was expected", n, test.cx, mp.Coordinates.X))
+				fmt.Sprintf("test %d: got position x: %d and %d was expected", n, mp.Coordinates.X, test.cx))
 
 			assert.Equal(t, test.cy, mp.Coordinates.Y,
-				fmt.Sprintf("test %d: got position y: %d and %d was expected", n, test.cx, mp.Coordinates.Y))
+				fmt.Sprintf("test %d: got position y: %d and %d was expected", n, mp.Coordinates.Y, test.cx))
 
 			assert.Equal(t, test.c, mp.Cardinal.Letter,
-				fmt.Sprintf("test %d: got position y: %s and %s was expected", n, test.c, mp.Cardinal.Letter))
+				fmt.Sprintf("test %d: got position y: %s and %s was expected", n, mp.Cardinal.Letter, test.c))
+
 		}
 
 	}

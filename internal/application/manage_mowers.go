@@ -5,11 +5,11 @@ import (
 	"strings"
 )
 
-func ManageMowers(mowers *[]domain.Mower) (string, error) {
+func ManageMowers(mowers []*domain.Mower) (string, error) {
 
 	var b = new(strings.Builder)
 
-	for _, mower := range *mowers {
+	for _, mower := range mowers {
 
 		lp, err := mower.MovementProcess()
 

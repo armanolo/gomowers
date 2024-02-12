@@ -38,3 +38,41 @@ func TestCardinalFromString(t *testing.T) {
 
 	}
 }
+
+func TestTurnTo(t *testing.T) {
+	tests := []struct {
+		cc string
+		nm string
+		ev string
+		e  string
+	}{
+		{"N", "L", "W", ""},
+		{"N", "M", "", "bad movement value"},
+		{"N", "R", "E", ""},
+	}
+
+	for n, test := range tests {
+
+		c, err := CreateCardinal(test.cc)
+		if err != nil {
+			t.Fatalf("test %d: not error expected", n)
+		}
+
+		nc, err := c.TurnTo(test.nm)
+
+		if test.e != "" {
+			if err == nil || err.Error() != test.e {
+				t.Errorf("Test %d: error: %s", n, err)
+			}
+		} else {
+			if err != nil {
+				t.Errorf("Test %d: error: %q", n, err)
+			}
+
+			assert.Equal(t, test.ev, nc.String(),
+				fmt.Sprintf("test %d: turned to %s but turned to %s was expected", n, test.ev, c.Letter))
+		}
+
+	}
+
+}

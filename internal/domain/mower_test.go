@@ -9,7 +9,7 @@ import (
 
 func TestCreateMower(t *testing.T) {
 
-	p := new(Plateau)
+	p, _ := CreatePlateau(Coordinates{X: 5, Y: 5})
 
 	tests := []struct {
 		mpx  int
@@ -28,7 +28,7 @@ func TestCreateMower(t *testing.T) {
 		mp, _ := CreateMowerPosition(coord, card)
 		path, _ := CreatePath(test.path)
 
-		m, err := CreateMower(p, mp, path)
+		m, err := CreateMower(&p, mp, path)
 
 		if test.e != "" {
 			if err == nil || err.Error() != test.e {
@@ -49,6 +49,60 @@ func TestCreateMower(t *testing.T) {
 				fmt.Sprintf("test %d: got position y: %q and %q was expected", n, test.path, m.Path.Movement))
 
 		}
+
+	}
+
+}
+
+func TestMovementProcess(t *testing.T) {
+
+	p, _ := CreatePlateau(Coordinates{X: 5, Y: 5})
+
+	tests := []struct {
+		mp   string
+		path string
+		ep   string
+		e    string
+	}{
+		{"11N", "M", "12N", ""},
+		{"22N", "ML", "23W", ""},
+		{"33N", "R", "33E", ""},
+		{"10W", "M", "00W", ""},
+		{"02S", "M", "01S", ""},
+		{"03E", "M", "13E", ""},
+		{"31S", "M", "30S", ""},
+	}
+
+	for n, test := range tests {
+
+		mp, err := MowerPositionFromString(test.mp)
+		if err != nil {
+			t.Fatalf("test %d: wrong mower: %q", n, err.Error())
+		}
+		path, err := PathFromString(test.path)
+		if err != nil {
+			t.Fatalf("test %d: wrong mower: %q", n, err.Error())
+		}
+		m, err := CreateMower(&p, mp, path)
+
+		if err != nil {
+			t.Fatalf("test %d: wrong mower: %q", n, err.Error())
+		}
+
+		m.MovementProcess()
+
+		if test.e != "" {
+			if err == nil || err.Error() != test.e {
+				t.Errorf("Test %d: error: %s", n, err)
+			}
+		} else {
+			if err != nil {
+				t.Errorf("Test %d: error: %q", n, err)
+			}
+		}
+
+		assert.Equal(t, test.ep, m.MowerPosition.String(),
+			fmt.Sprintf("test %d: got position y: %q and %q was expected", n, m.MowerPosition.String(), test.ep))
 
 	}
 

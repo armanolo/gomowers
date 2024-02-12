@@ -24,16 +24,9 @@ func CreateCardinal(character string) (Cardinal, error) {
 	if len(character) != 1 {
 		return Cardinal{}, errors.New("bad cardinat format")
 	}
+	l = strings.ToUpper(character)
 
-	lu := strings.ToUpper(character)
-
-	for _, a := range CARDINALS {
-		if a == lu {
-			l = a
-		}
-	}
-
-	if l == "" {
+	if !IsCardinalValue(l) {
 		return Cardinal{}, errors.New("bad cardinal value")
 	}
 
@@ -41,6 +34,10 @@ func CreateCardinal(character string) (Cardinal, error) {
 }
 
 func (c Cardinal) TurnTo(movement string) (Cardinal, error) {
+	if !IsMovementValue(movement) || movement == PATH_M {
+		return Cardinal{}, errors.New("bad movement value")
+	}
+
 	var offset int
 	if movement == PATH_R {
 		offset = 1
@@ -66,4 +63,13 @@ func getIndex(cardinal string, cardinals []string) int {
 
 func (c Cardinal) String() string {
 	return c.Letter
+}
+
+func IsCardinalValue(cardinal string) bool {
+	for _, a := range CARDINALS {
+		if a == cardinal {
+			return true
+		}
+	}
+	return false
 }
