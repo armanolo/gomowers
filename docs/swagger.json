@@ -1,0 +1,56 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API that processes mowers path to enjoy",
+        "title": "GoMowers API",
+        "contact": {
+            "name": "Manuel Martin",
+            "email": "armanolo@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/",
+    "paths": {
+        "/manage": {
+            "post": {
+                "description": "Data input with plateau upper-right coordinate and then mower coordinates and movements",
+                "consumes": [
+                    "text/plain"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "Mowers operation"
+                ],
+                "summary": "Manage instructions",
+                "parameters": [
+                    {
+                        "example": "'55\\n12N\\nLMLMLMLMM\\n33E\\nMMRMMRMRRM'",
+                        "description": "Data input with plateau upper-right coordinate and then mower coordinates and movements",
+                        "name": "requestBody",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success script of operations",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

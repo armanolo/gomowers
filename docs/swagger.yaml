@@ -1,0 +1,39 @@
+basePath: /
+info:
+  contact:
+    email: armanolo@gmail.com
+    name: Manuel Martin
+  description: API that processes mowers path to enjoy
+  title: GoMowers API
+  version: "1.0"
+paths:
+  /manage:
+    post:
+      consumes:
+      - text/plain
+      description: Data input with plateau upper-right coordinate and then mower coordinates
+        and movements
+      parameters:
+      - description: Data input with plateau upper-right coordinate and then mower
+          coordinates and movements
+        example: '''55\n12N\nLMLMLMLMM\n33E\nMMRMMRMRRM'''
+        in: body
+        name: requestBody
+        required: true
+        schema:
+          type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Success script of operations
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Manage instructions
+      tags:
+      - Mowers operation
+swagger: "2.0"

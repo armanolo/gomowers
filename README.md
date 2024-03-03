@@ -29,3 +29,6 @@ CLI exmple:
 go run ./cmd/cli -i file -c ./example.coord 
 go run ./cmd/cli -i text -c $'55\n12N\nLMLMLMLMM\n33E\nMMRMMRMRRM'
 ```
+
+
+swag init -d "./cmd/api" -g openapi.go
